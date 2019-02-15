@@ -1,7 +1,6 @@
 package svr
 
 import (
-	"errors"
 	"fmt"
 	"github.com/fancygo/fc_svr/iface"
 	"net"
