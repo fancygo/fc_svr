@@ -10,20 +10,19 @@ type Conn struct {
 	*net.TCPConn
 	ConnID int
 
-	isClosed  bool
-	handleApi iface.HandFunc
+	isClosed bool
 
 	ExitBuffChan chan bool
 
 	Router iface.IRouter
 }
 
-func NewConn(conn *net.TCPConn, connID int, callbackApi iface.HandFunc) *Conn {
+func NewConn(conn *net.TCPConn, connID int, router iface.IRouter) *Conn {
 	c := &Conn{
 		TCPConn:      conn,
 		ConnID:       connID,
 		isClosed:     false,
-		handleApi:    callbackApi,
+		Router:       router,
 		ExitBuffChan: make(chan bool, 1),
 	}
 	return c

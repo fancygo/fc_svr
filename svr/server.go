@@ -16,15 +16,6 @@ type Server struct {
 	Router    iface.IRouter
 }
 
-func CallBackToClient(conn *net.TCPConn, data []byte, count int) error {
-	fmt.Println("CallbackToClient ...")
-	if _, err := conn.Write(data[:count]); err != nil {
-		fmt.Println("write back buf err ", err)
-		return errors.New("CallbackToClient error")
-	}
-	return nil
-}
-
 func (this *Server) Start() {
 	go func() {
 		addr, err := net.ResolveTCPAddr(this.IPVersion, fmt.Sprintf("%s:%d", this.IP, this.Port))
