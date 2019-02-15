@@ -3,6 +3,7 @@ package svr
 import (
 	"fmt"
 	"github.com/fancygo/fc_svr/iface"
+	"github.com/fancygo/fc_svr/utils"
 	"net"
 	"time"
 )
@@ -64,11 +65,13 @@ func (this *Server) AddRouter(router iface.IRouter) {
 }
 
 func NewServer(name string) iface.IServer {
+	utils.GlobalConfig.Reload()
+	fmt.Println(utils.GlobalConfig)
 	s := &Server{
-		Name:      name,
+		Name:      utils.GlobalConfig.Name,
 		IPVersion: "tcp4",
-		IP:        "0.0.0.0",
-		Port:      7002,
+		IP:        utils.GlobalConfig.Host,
+		Port:      utils.GlobalConfig.TcpPort,
 		Router:    nil,
 	}
 	return s

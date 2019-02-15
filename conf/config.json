@@ -1,0 +1,8 @@
+{
+    host: "0.0.0.0",
+    tcp_port: "7003",
+    name: "fancygo",
+    version:"v1.0",
+    max_packet_size:4096,
+    max_conn:100
+}
