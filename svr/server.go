@@ -13,6 +13,7 @@ type Server struct {
 	IPVersion string
 	IP        string
 	Port      int
+	Router    iface.IRouter
 }
 
 func CallBackToClient(conn *net.TCPConn, data []byte, count int) error {
@@ -48,7 +49,7 @@ func (this *Server) Start() {
 				fmt.Println("Accept err ", err)
 				continue
 			}
-			dealConn := NewConn(conn, cid, CallBackToClient)
+			dealConn := NewConn(conn, cid, this.Router)
 			cid++
 			go dealConn.Start()
 		}
@@ -67,12 +68,18 @@ func (this *Server) Serve() {
 	}
 }
 
+func (this *Server) AddRouter(router iface.IRouter) {
+	this.Router = router
+	fmt.Println("Add Router")
+}
+
 func NewServer(name string) iface.IServer {
 	s := &Server{
 		Name:      name,
 		IPVersion: "tcp4",
 		IP:        "0.0.0.0",
 		Port:      7002,
+		Router:    nil,
 	}
 	return s
 }

@@ -14,6 +14,8 @@ type Conn struct {
 	handleApi iface.HandFunc
 
 	ExitBuffChan chan bool
+
+	Router iface.IRouter
 }
 
 func NewConn(conn *net.TCPConn, connID int, callbackApi iface.HandFunc) *Conn {
@@ -34,17 +36,23 @@ func (this *Conn) StartReader() {
 
 	for {
 		buf := make([]byte, 512)
-		count, err := this.TCPConn.Read(buf)
+		_, err := this.TCPConn.Read(buf)
 		if err != nil {
 			fmt.Println("recv buf err ", err)
 			this.ExitBuffChan <- true
 			continue
 		}
-		if err := this.handleApi(this.TCPConn, buf, count); err != nil {
-			fmt.Println("connID ", this.ConnID, " handle is error")
-			this.ExitBuffChan <- true
-			return
+
+		req := &Request{
+			conn: this,
+			data: buf,
 		}
+
+		go func(request iface.IRequest) {
+			this.Router.PreHandle(request)
+			this.Router.Handle(request)
+			this.Router.PostHandle(request)
+		}(req)
 	}
 }
 
