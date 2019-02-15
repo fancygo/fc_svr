@@ -1,1 +1,1 @@
-module githu.com/fancygo/fc_svr
+module github.com/fancygo/fc_svr
