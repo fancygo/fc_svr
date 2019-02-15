@@ -8,7 +8,7 @@ type IConn interface {
 	Start()
 	Stop()
 	GetTCPConn() *net.TCPConn
-	GetConnID() uint32
+	GetConnID() int
 	RemoteAdr() net.Addr
 	Send(data []byte) error
 	SendBuff(data []byte) error
